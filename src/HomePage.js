@@ -8,7 +8,7 @@ function HomePage() {
             method: 'GET',
             url: 'https://omgvamp-hearthstone-v1.p.rapidapi.com/info',
             headers: {
-                'X-RapidAPI-Key': "xxxxxxx",
+                'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
                 'X-RapidAPI-Host': 'omgvamp-hearthstone-v1.p.rapidapi.com'
             }
         };
