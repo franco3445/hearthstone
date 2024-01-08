@@ -7,16 +7,16 @@ function HomePage() {
     const [inputValue, setInputValue] = React.useState('')
 
     const lookupValues = [
-        { endpoint :'info',  title: 'Get Patch Notes'},
-        { endpoint :'cards',  title: 'Get All Cards'},
-        { endpoint :`cards/search/${inputValue}`,  title: 'Search Card'},
-        { endpoint :`cards/classes/${inputValue}`,  title: 'Search by Class'},
-        { endpoint :`cards/races/${inputValue}`,  title: 'Search by Race'},
-        { endpoint :`cards/sets/${inputValue}`,  title: 'Search by Set'},
-        { endpoint :`cards/qualities/${inputValue}`,  title: 'Search by Qualities'},
-        { endpoint :`cards/factions/${inputValue}`,  title: 'Search by Faction'},
-        { endpoint :`cards/types/${inputValue}`,  title: 'Search by Type'},
-        { endpoint :'cardback', title: 'Get CardBacks'},
+        {endpoint: 'cardback', title: 'Get CardBacks'},
+        {endpoint: 'cards', title: 'Get All Cards'},
+        {endpoint: `cards/classes/${inputValue}`, title: 'Search by Class'},
+        {endpoint: `cards/factions/${inputValue}`, title: 'Search by Faction'},
+        {endpoint: `cards/qualities/${inputValue}`, title: 'Search by Qualities'},
+        {endpoint: `cards/races/${inputValue}`, title: 'Search by Race'},
+        {endpoint: `cards/search/${inputValue}`, title: 'Search Card'},
+        {endpoint: `cards/sets/${inputValue}`, title: 'Search by Set'},
+        {endpoint: `cards/types/${inputValue}`, title: 'Search by Type'},
+        {endpoint: 'info', title: 'Get Patch Notes'},
     ];
 
     const reachHearthStoneEndpoint = async function (endpoint) {
