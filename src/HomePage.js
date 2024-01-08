@@ -1,12 +1,29 @@
 import axios from "axios";
+import * as React from 'react';
 import './HomePage.css';
 
 function HomePage() {
 
-    const getCurrentPatchInformation = async function () {
+    const [inputValue, setInputValue] = React.useState('')
+
+    const lookupValues = [
+        {endpoint: 'cardback', title: 'Get CardBacks'},
+        {endpoint: 'cards', title: 'Get All Cards'},
+        {endpoint: `cards/classes/${inputValue}`, title: 'Search by Class'},
+        {endpoint: `cards/factions/${inputValue}`, title: 'Search by Faction'},
+        {endpoint: `cards/qualities/${inputValue}`, title: 'Search by Qualities'},
+        {endpoint: `cards/races/${inputValue}`, title: 'Search by Race'},
+        {endpoint: `cards/search/${inputValue}`, title: 'Search Card'},
+        {endpoint: `cards/sets/${inputValue}`, title: 'Search by Set'},
+        {endpoint: `cards/types/${inputValue}`, title: 'Search by Type'},
+        {endpoint: 'info', title: 'Get Patch Notes'},
+    ];
+
+    const reachHearthStoneEndpoint = async function (endpoint) {
+        console.log(inputValue);
         const options = {
             method: 'GET',
-            url: 'https://omgvamp-hearthstone-v1.p.rapidapi.com/info',
+            url: `https://omgvamp-hearthstone-v1.p.rapidapi.com/${endpoint}`,
             headers: {
                 'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
                 'X-RapidAPI-Host': 'omgvamp-hearthstone-v1.p.rapidapi.com'
@@ -20,16 +37,19 @@ function HomePage() {
             console.error(error);
         }
     }
-    getCurrentPatchInformation();
-      return (
+
+    return (
         <div className="HomePage">
-          <header className="HomePage-header">
-            <h1>HearthStone Data Finder</h1>
-              <p>Enter card information</p>
-              <input/>
-          </header>
+            <header className="HomePage-header">
+                <h1>HearthStone Data Finder</h1>
+                <p>Enter card information</p>
+                <input value={inputValue} onInput={e => setInputValue(e.target.value)}/>
+                {lookupValues.map(button => {
+                    return <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={button.endpoint}>{button.title}</button>
+                })}
+            </header>
         </div>
-      );
+    );
 }
 
 export default HomePage;
