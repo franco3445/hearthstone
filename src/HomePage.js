@@ -6,7 +6,21 @@ function HomePage() {
 
     const [inputValue, setInputValue] = React.useState('')
 
+    const lookupValues = [
+        { endpoint :'info',  title: 'Get Patch Notes'},
+        { endpoint :'cards',  title: 'Get All Cards'},
+        { endpoint :`cards/search/${inputValue}`,  title: 'Search Card'},
+        { endpoint :`cards/classes/${inputValue}`,  title: 'Search by Class'},
+        { endpoint :`cards/races/${inputValue}`,  title: 'Search by Race'},
+        { endpoint :`cards/sets/${inputValue}`,  title: 'Search by Set'},
+        { endpoint :`cards/qualities/${inputValue}`,  title: 'Search by Qualities'},
+        { endpoint :`cards/factions/${inputValue}`,  title: 'Search by Faction'},
+        { endpoint :`cards/types/${inputValue}`,  title: 'Search by Type'},
+        { endpoint :'cardback', title: 'Get CardBacks'},
+    ];
+
     const reachHearthStoneEndpoint = async function (endpoint) {
+        console.log(inputValue);
         const options = {
             method: 'GET',
             url: `https://omgvamp-hearthstone-v1.p.rapidapi.com/${endpoint}`,
@@ -30,16 +44,9 @@ function HomePage() {
                 <h1>HearthStone Data Finder</h1>
                 <p>Enter card information</p>
                 <input value={inputValue} onInput={e => setInputValue(e.target.value)}/>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={'info'}>Get Patch Notes</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={'cards'}>Get All Cards</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/search/${inputValue}`}>Search Card</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/classes/${inputValue}`}>Search by Class</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/races/${inputValue}`}>Search by Race</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/sets/${inputValue}`}>Search by Set</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/qualities/${inputValue}`}>Search by Qualities</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/factions/${inputValue}`}>Search by Faction</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cards/types/${inputValue}`}>Search by Type</button>
-                <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={`cardbacks`}>Get CardBacks</button>
+                {lookupValues.map(button => {
+                    return <button onClick={e => reachHearthStoneEndpoint(e.target.value)} value={button.endpoint}>{button.title}</button>
+                })}
             </header>
         </div>
     );
