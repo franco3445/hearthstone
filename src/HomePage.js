@@ -1,6 +1,6 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import axios from "axios";
+import PropTypes from 'prop-types';
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -53,32 +53,44 @@ function TablePaginationActions(props) {
     return (
         <Box sx={{ flexShrink: 0, ml: 2.5 }}>
             <IconButton
-                onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
                 aria-label="first page"
-            >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-            </IconButton>
-            <IconButton
-                onClick={handleBackButtonClick}
                 disabled={page === 0}
+                onClick={handleFirstPageButtonClick}
+            >
+                {theme.direction === 'rtl'
+                    ? <LastPageIcon />
+                    : <FirstPageIcon />
+                }
+            </IconButton>
+            <IconButton
                 aria-label="previous page"
+                disabled={page === 0}
+                onClick={handleBackButtonClick}
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                {theme.direction === 'rtl'
+                    ? <KeyboardArrowRight />
+                    : <KeyboardArrowLeft />
+                }
             </IconButton>
             <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                onClick={handleNextButtonClick}
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                {theme.direction === 'rtl'
+                    ? <KeyboardArrowLeft />
+                    : <KeyboardArrowRight />
+                }
             </IconButton>
             <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                onClick={handleLastPageButtonClick}
             >
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                {theme.direction === 'rtl'
+                    ? <FirstPageIcon />
+                    : <LastPageIcon />
+                }
             </IconButton>
         </Box>
     );
@@ -92,8 +104,8 @@ TablePaginationActions.propTypes = {
 };
 
 function HomePage() {
-    const [inputValue, setInputValue] = React.useState('');
     const [apiResults, setApiResults] = React.useState([]);
+    const [inputValue, setInputValue] = React.useState('');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -148,7 +160,8 @@ function HomePage() {
         try {
             console.log('In Try Block...');
             const response = await axios.request(options);
-            console.log('Setting Requesting...');
+
+            console.log('Setting Request Results...');
             setApiResults(response.data);
         } catch (error) {
             console.error(error);
@@ -172,6 +185,79 @@ function HomePage() {
         setPage(0);
     };
 
+    const tableHeader = (
+        <TableHead>
+            <TableRow>
+                {tableHeaderLabels.map(label => {
+                    return (
+                        <TableCell align="center">
+                            {label}
+                        </TableCell>
+                    )
+                })}
+            </TableRow>
+        </TableHead>
+    );
+
+    const tableFooter = (
+        <TableFooter>
+            <TableRow>
+                <TablePagination
+                    colSpan={3}
+                    count={apiResults.length}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    ActionsComponent={TablePaginationActions}
+                    SelectProps={{
+                        inputProps: {
+                            'aria-label': 'rows per page',
+                        },
+                        native: true,
+                    }}
+                />
+            </TableRow>
+        </TableFooter>
+    );
+
+    const emptyTableResults = (
+        <TableRow style={{ height: 53 }}>
+            <TableCell align="center" colSpan={5}  >
+                Nothing to report...
+            </TableCell>
+        </TableRow>
+    );
+    const tableWithResults = (rowsPerPage > 0
+            ? apiResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : apiResults
+        ).map((row) => (
+            <TableRow
+                key={row.dbfId}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+                <TableCell
+                    align="center"
+                    component="th"
+                    scope="row"
+                >
+                    {row.name}
+                </TableCell>
+                <TableCell align="center">
+                    {row.cardSet}
+                </TableCell>
+                <TableCell align="center">
+                    {row.type}</TableCell>
+                <TableCell align="center">
+                    {row.playerClass}
+                </TableCell>
+                <TableCell align="center">
+                    {row.cost}
+                </TableCell>
+            </TableRow>
+        ));
+
     const displayTable = (
         <TableContainer component={Paper} sx={{maxHeight: 500}}>
             <Table
@@ -180,71 +266,21 @@ function HomePage() {
                 sx={{ minWidth: 650 }}
                 stickyHeader
             >
-                <TableHead>
-                    <TableRow>
-                        {tableHeaderLabels.map(label => {
-                            return (
-                                <TableCell align="center">
-                                    {label}
-                                </TableCell>
-                            )
-                        })}
-                    </TableRow>
-                </TableHead>
+                {tableHeader}
                 <TableBody>
-                    {(rowsPerPage > 0
-                            ? apiResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : apiResults
-                    ).map((row) => (
-                        <TableRow
-                            key={row.dbfId}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell align="center" component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="center">
-                                {row.cardSet}
-                            </TableCell>
-                            <TableCell align="center">
-                                {row.type}</TableCell>
-                            <TableCell align="center">
-                                {row.playerClass}
-                            </TableCell>
-                            <TableCell align="center">
-                                {row.cost}
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {apiResults.length === 0
+                        ? emptyTableResults
+                        : tableWithResults}
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
                             <TableCell colSpan={6} />
                         </TableRow>
                     )}
                 </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            ActionsComponent={TablePaginationActions}
-                            colSpan={3}
-                            count={apiResults.length}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            page={page}
-                            rowsPerPage={rowsPerPage}
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            SelectProps={{
-                                inputProps: {
-                                    'aria-label': 'rows per page',
-                                },
-                                native: true,
-                            }}
-                        />
-                    </TableRow>
-                </TableFooter>
+                {tableFooter}
             </Table>
         </TableContainer>
-    )
+    );
 
     const requestButtonHtml = lookupValues.map(button => {
         return (
@@ -264,7 +300,7 @@ function HomePage() {
                 {classs}
             </MenuItem>
         )
-    })
+    });
 
     return (
         <div className="HomePage">
