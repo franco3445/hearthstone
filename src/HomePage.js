@@ -162,6 +162,7 @@ function HomePage() {
             const response = await axios.request(options);
 
             console.log('Setting Request Results...');
+            setPage(0);
             setApiResults(response.data);
         } catch (error) {
             console.error(error);
