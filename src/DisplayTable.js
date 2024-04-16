@@ -9,12 +9,8 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import {
     useTheme,
     Box,
-    Button,
     IconButton,
-    MenuItem,
     Paper,
-    Select,
-    SelectChangeEvent,
     Table,
     TableBody,
     TableCell,
@@ -23,8 +19,6 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    TextField,
-    Typography,
 } from '@mui/material';
 
 function TablePaginationActions(props) {
