@@ -108,7 +108,7 @@ function HomePage() {
 
     const classDropDownMenuItems = classes.map(classs => {
         return (
-            <MenuItem value={classs} >
+            <MenuItem value={classs}>
                 {classs}
             </MenuItem>
         )
